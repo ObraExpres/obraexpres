@@ -23,40 +23,69 @@ const state = {
 
 // Tabla de pesos reales de los productos en kg
 const PRODUCT_WEIGHTS = {
-  1: 1.3,    // Taladro DeWalt
-  2: 2.0,    // Amoladora Bosch
-  3: 42.5,   // Cemento Gris
-  4: 9.0,    // Varilla Corrugada
-  5: 12.0,   // Cable THW
-  6: 0.3,    // Interruptor Inteligente
-  7: 2.5,    // Mezcladora Monomando
-  8: 10.0,   // Tubo PVC 4"
-  9: 24.0,   // Pintura (19L)
-  10: 25.0,  // Yeso Blanco
-  11: 2.0,   // Pala Redonda
-  12: 15.0,  // Carretilla de Mano
-  13: 0.8,   // Martillo
-  14: 0.4,   // Cinta Métrica
-  15: 1.2,   // Nivel de Burbuja
-  16: 1.5,   // Llave Stilson
-  17: 0.9,   // Juego de Destornilladores
-  18: 8.0,   // Escalera de Tijera
-  19: 1.0,   // Clavos (1kg)
-  20: 1.0,   // Alambre (1kg)
-  21: 2.5,   // Ladrillo Klinker
-  22: 40.0,  // Arena Fina
-  23: 40.0,  // Piedra Chancada
-  24: 1.2,   // Aditivo Plastificante
-  25: 25.0,  // Pegamento cerámico
-  26: 0.3,   // Tubo de abasto
-  27: 35.0,  // Inodoro One Piece
-  28: 4.0,   // Cable UTP
-  29: 0.1,   // Cinta aislante
-  30: 0.1,   // Caja octogonal
-  31: 0.3,   // Llave termomagnética
-  32: 0.4,   // Silicona Multiuso
-  33: 0.3,   // Rodillo
-  34: 0.1    // Brocha
+  1: 1.3,      // Taladro DeWalt
+  2: 2.0,      // Amoladora Bosch
+  3: 42.5,     // Cemento Pacasmayo Antisalitre
+  4: 2.0,      // Varilla de Fierro 6mm (9m)
+  5: 12.0,     // Cable THW Indeco
+  6: 0.3,      // Interruptor Bticino
+  7: 2.5,      // Mezcladora Vainsa
+  8: 2.0,      // Tubo PVC SAP Pavco
+  9: 5.0,      // Pintura CPP (Galón)
+  10: 25.0,    // Yeso Pacasmayo (25kg)
+  11: 2.0,     // Pala Redonda
+  12: 15.0,    // Carretilla Buggy
+  13: 0.8,     // Martillo Stanley
+  14: 0.4,     // Wincha Métrica Stanley
+  15: 1.2,     // Nivel de Burbuja Stanley
+  16: 1.5,     // Llave Stilson Ridgid
+  17: 0.9,     // Juego Destornilladores Stanley
+  18: 8.0,     // Escalera Tijera Nexstep
+  19: 1.0,     // Clavos Arequipa 3" (1kg)
+  20: 1.0,     // Alambre Nro 16 (1kg)
+  21: 2.8,     // Ladrillo KK 18 Huecos Lark (Unidad)
+  22: 40.0,    // Arena Fina Bolsa (40kg)
+  23: 40.0,    // Piedra Chancada Bolsa (40kg)
+  24: 1.2,     // Aditivo Plastificante Chema
+  25: 25.0,    // Pegamento Celima (25kg)
+  26: 0.3,     // Tubo Abasto Vainsa
+  27: 35.0,    // Inodoro Trebol
+  28: 4.0,     // Cable de red Dixon
+  29: 0.1,     // Cinta Aislante 3M
+  30: 0.1,     // Caja Octogonal Pavco
+  31: 0.3,     // Llave Termomagnética Bticino
+  32: 0.4,     // Silicona Tekno
+  33: 0.3,     // Rodillo Tekno
+  34: 0.1,     // Brocha CPP 3"
+  // --- Obra Gruesa ---
+  35: 42.5,    // Cemento Pacasmayo Extra Forte
+  36: 42.5,    // Cemento Pacasmayo Tipo I
+  37: 42.5,    // Cemento Sol
+  38: 42.5,    // Cemento Inka
+  39: 2800.0,  // Ladrillo KK 18 Huecos (Millar)
+  40: 2.1,     // Ladrillo Pandereta (Unidad)
+  41: 2100.0,  // Ladrillo Pandereta (Millar)
+  42: 8.0,     // Ladrillo Techo Hueco 15
+  43: 7.0,     // Ladrillo Techo Hueco 12
+  44: 4.5,     // Ladrillo Techo Hueco 8
+  45: 2.0,     // Aceros Arequipa 6mm (9m)
+  46: 3.6,     // Aceros Arequipa 8mm (9m)
+  47: 5.0,     // Aceros Arequipa 3/8" (9m)
+  48: 9.0,     // Aceros Arequipa 1/2" (9m)
+  49: 14.0,    // Aceros Arequipa 5/8" (9m)
+  50: 20.0,    // Aceros Arequipa 3/4" (9m)
+  51: 2.0,     // Siderperu 6mm (9m)
+  52: 3.6,     // Siderperu 8mm (9m)
+  53: 5.0,     // Siderperu 3/8" (9m)
+  54: 9.0,     // Siderperu 1/2" (9m)
+  55: 14.0,    // Siderperu 5/8" (9m)
+  56: 20.0,    // Siderperu 3/4" (9m)
+  57: 1600.0,  // Arena Gruesa (m³)
+  58: 1500.0,  // Arena Fina (m³)
+  59: 1550.0,  // Piedra Chancada 1/2" (m³)
+  60: 1550.0,  // Piedra Chancada 3/4" (m³)
+  61: 1700.0,  // Hormigón (m³)
+  62: 1800.0   // Afirmado (m³)
 };
 
 // Matriz de distancias en km a distritos de la Zona Norte
@@ -132,6 +161,7 @@ const DOM = {
   cartGroupsContainer: document.getElementById('cart-groups-container'),
   cartSummaryDetails: document.getElementById('cart-summary-details'),
   checkoutBtn: document.getElementById('checkout-btn'),
+  btnDownloadProforma: document.getElementById('btn-download-proforma'),
   
   // Toast
   toastContainer: document.getElementById('toast-container'),
@@ -416,6 +446,13 @@ function setupEventListeners() {
       DOM.checkoutBtn.innerHTML = '💳 Procesar Compra en ObraExpres';
     }
   });
+
+  // Descargar Proforma PDF
+  if (DOM.btnDownloadProforma) {
+    DOM.btnDownloadProforma.addEventListener('click', () => {
+      generateProformaPDF();
+    });
+  }
 
   // Auth Modal toggles
   if (DOM.btnAuth) {
@@ -1192,29 +1229,32 @@ function renderCalculatorView() {
     const vol = parseFloat(DOM.calcVolume.value) || 0;
     if (vol > 0) {
       estimation = [
-        { productId: 3, name: "Cemento Gris Portland Clase Extra (50kg)", quantity: Math.ceil(vol * 9.7), unit: "bolsas" },
-        { productId: 22, name: "Arena Fina Lavada (Bolsa 40kg)", quantity: Math.ceil(vol * 21), unit: "bolsas" },
-        { productId: 23, name: "Piedra Chancada de 1/2\" (Bolsa 40kg)", quantity: Math.ceil(vol * 21), unit: "bolsas" }
+        { productId: 36, name: "Cemento Pacasmayo Tipo I (Bolsa 42.5 kg)", quantity: Math.ceil(vol * 9.7), unit: "bolsas" },
+        { productId: 57, name: "Arena Gruesa por Metro Cúbico (m³)", quantity: Math.ceil(vol * 0.52), unit: "m³" },
+        { productId: 59, name: "Piedra Chancada de 1/2\" por Metro Cúbico (m³)", quantity: Math.ceil(vol * 0.53), unit: "m³" }
       ];
     }
   } else if (type === 'muro') {
     const area = parseFloat(DOM.calcWallArea.value) || 0;
     if (area > 0) {
+      const brickQty = Math.ceil(area * 40);
+      const millares = (brickQty / 1000).toFixed(2);
       estimation = [
-        { productId: 21, name: "Ladrillo Klinker Rojo (Unidad)", quantity: Math.ceil(area * 40), unit: "unidades" },
-        { productId: 3, name: "Cemento Gris Portland Clase Extra (50kg)", quantity: Math.ceil(area * 0.15), unit: "bolsas" },
-        { productId: 22, name: "Arena Fina Lavada (Bolsa 40kg)", quantity: Math.ceil(area * 0.6), unit: "bolsas" }
+        { productId: 21, name: `Ladrillo King Kong 18 Huecos Lark (Unidad) [${millares} millares]`, quantity: brickQty, unit: "unidades" },
+        { productId: 36, name: "Cemento Pacasmayo Tipo I (Bolsa 42.5 kg)", quantity: Math.ceil(area * 0.15), unit: "bolsas" },
+        { productId: 57, name: "Arena Gruesa por Metro Cúbico (m³)", quantity: Math.ceil(area * 0.025), unit: "m³" }
       ];
     }
   } else if (type === 'techo') {
     const area = parseFloat(DOM.calcRoofArea.value) || 0;
     if (area > 0) {
       estimation = [
-        { productId: 3, name: "Cemento Gris Portland Clase Extra (50kg)", quantity: Math.ceil(area * 0.28), unit: "bolsas" },
-        { productId: 22, name: "Arena Fina Lavada (Bolsa 40kg)", quantity: Math.ceil(area * 1.1), unit: "bolsas" },
-        { productId: 23, name: "Piedra Chancada de 1/2\" (Bolsa 40kg)", quantity: Math.ceil(area * 1.1), unit: "bolsas" },
-        { productId: 21, name: "Ladrillo Klinker Rojo (Unidad)", quantity: Math.ceil(area * 8.3), unit: "unidades" },
-        { productId: 4, name: "Varilla Corrugada de Acero R-42 1/2\" (6m)", quantity: Math.ceil(area * 1.5), unit: "varillas" }
+        { productId: 42, name: "Ladrillo de Techo Hueco 15 Lark (Unidad)", quantity: Math.ceil(area * 8.33), unit: "unidades" },
+        { productId: 36, name: "Cemento Pacasmayo Tipo I (Bolsa 42.5 kg)", quantity: Math.ceil(area * 0.28), unit: "bolsas" },
+        { productId: 57, name: "Arena Gruesa por Metro Cúbico (m³)", quantity: Math.ceil(area * 0.04), unit: "m³" },
+        { productId: 59, name: "Piedra Chancada de 1/2\" por Metro Cúbico (m³)", quantity: Math.ceil(area * 0.04), unit: "m³" },
+        { productId: 48, name: "Varilla de Acero Corrugado Aceros Arequipa 1/2\" (9m)", quantity: Math.ceil(area * 1.5), unit: "varillas" },
+        { productId: 45, name: "Varilla de Acero Corrugado Aceros Arequipa 6mm (9m)", quantity: Math.ceil(area * 0.2), unit: "varillas" }
       ];
     }
   }
@@ -1284,4 +1324,297 @@ function addToCartWithQty(productId, storeId, price, quantity) {
   }
   saveCartToStorage();
   updateCartBadge();
+}
+
+// --- FUNCIONES GENERADORAS DE PDF (PROFORMA) ---
+
+function addBusinessDays(date, days) {
+  let result = new Date(date);
+  let addedDays = 0;
+  while (addedDays < days) {
+    result.setDate(result.getDate() + 1);
+    const dayOfWeek = result.getDay();
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) { // 0: Domingo, 6: Sábado
+      addedDays++;
+    }
+  }
+  return result;
+}
+
+function formatDate(date) {
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
+function getProductUnit(product) {
+  if (!product) return 'Unidad';
+  const name = product.name || '';
+  const category = product.category || '';
+  const specs = product.specs || {};
+
+  // Deducir unidades según el nombre y la categoría
+  if (name.includes('Bolsa') || (specs['Peso'] && specs['Peso'].includes('kg') && (name.includes('Cemento') || name.includes('Yeso') || name.includes('Pegamento') || name.includes('Arena') || name.includes('Piedra')))) {
+    return 'Bolsa';
+  }
+  if (name.includes('(Millar)') || name.includes('Millar')) {
+    return 'Millar';
+  }
+  if (name.includes('Varilla') || name.includes('Fierro Corrugado') || name.includes('Acero Corrugado')) {
+    return 'Varilla';
+  }
+  if (name.includes('m³') || name.includes('Metro Cúbico') || (specs['Unidad'] && specs['Unidad'].includes('m³'))) {
+    return 'm³';
+  }
+  if (name.includes('Rollo') || name.includes('100m')) {
+    return 'Rollo';
+  }
+  if (name.includes('(1kg)') || name.includes('1kg')) {
+    return 'kg';
+  }
+  if (name.includes('Tubo PVC') || name.includes('Tubo de PVC')) {
+    return 'Tubo';
+  }
+  if (name.includes('Galón')) {
+    return 'Galón';
+  }
+  if (name.includes('Litro') || name.includes('(1L)')) {
+    return 'Litro';
+  }
+
+  // Fallbacks según categoría
+  if (category === 'Materiales') {
+    if (name.includes('Cemento')) return 'Bolsa';
+    if (name.includes('Ladrillo')) return 'Unidad';
+    if (name.includes('Fierro') || name.includes('Acero')) return 'Varilla';
+    if (name.includes('Arena') || name.includes('Piedra') || name.includes('Hormigón') || name.includes('Afirmado')) return 'm³';
+  }
+  if (category === 'Plomería' && name.toLowerCase().includes('tubo') && !name.toLowerCase().includes('abasto')) {
+    return 'Tubo';
+  }
+  
+  return 'Unidad';
+}
+
+function generateProformaPDF() {
+  if (state.cart.length === 0) {
+    showToast('El carrito está vacío', 'warning');
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const today = new Date();
+  const validityDate = addBusinessDays(today, 3);
+
+  const strToday = formatDate(today);
+  const strValidity = formatDate(validityDate);
+
+  const clientName = state.currentUser ? state.currentUser.full_name : "Cliente por Registrar";
+  const projectName = state.currentUser ? `Proyecto - ${state.currentUser.role}` : "Mi Proyecto Obra";
+  const district = state.selectedDistrict;
+
+  // Encabezado
+  doc.setFillColor(15, 23, 42); // #0f172a
+  doc.rect(0, 0, 210, 35, 'F');
+
+  // Línea decorativa naranja
+  doc.setFillColor(255, 122, 0); // #ff7a00
+  doc.rect(0, 35, 210, 2, 'F');
+
+  // Texto Encabezado
+  doc.setTextColor(255, 255, 255);
+  doc.setFont("Helvetica", "bold");
+  doc.setFontSize(22);
+  doc.text("ObraExpres", 15, 22);
+
+  doc.setFontSize(10);
+  doc.setFont("Helvetica", "normal");
+  doc.text("La red inteligente de suministros de construcción", 15, 28);
+
+  doc.setFont("Helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text("PROFORMA DE COMPRA", 195, 20, { align: "right" });
+
+  const proformaNum = `OE-${today.getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+  doc.setFont("Helvetica", "normal");
+  doc.setFontSize(10);
+  doc.text(`Documento N°: ${proformaNum}`, 195, 27, { align: "right" });
+
+  // Datos del Cliente e Información General
+  doc.setTextColor(15, 23, 42);
+  doc.setFont("Helvetica", "bold");
+  doc.setFontSize(11);
+  doc.text("DATOS DEL CLIENTE y PROYECTO", 15, 48);
+
+  doc.setFont("Helvetica", "normal");
+  doc.setFontSize(9);
+  doc.text(`Cliente: ${clientName}`, 15, 55);
+  doc.text(`Proyecto: ${projectName}`, 15, 61);
+  doc.text(`Distrito de Despacho: ${district}`, 15, 67);
+
+  doc.setFont("Helvetica", "bold");
+  doc.text("INFORMACIÓN DE VALIDEZ", 120, 48);
+  doc.setFont("Helvetica", "normal");
+  doc.text(`Fecha de Emisión: ${strToday}`, 120, 55);
+  doc.text(`Fecha de Validez: ${strValidity}`, 120, 61);
+  doc.text(`Estado: VÁLIDO (3 Días Hábiles)`, 120, 67);
+
+  // Línea divisoria
+  doc.setDrawColor(226, 232, 240); // #e2e8f0
+  doc.setLineWidth(0.5);
+  doc.line(15, 73, 195, 73);
+
+  // Generar tabla de productos agrupados por tienda para cálculo idéntico de fletes
+  const tableRows = [];
+  let subtotalGeneral = 0;
+  let envioGeneral = 0;
+  let pesoGeneral = 0;
+
+  const grouped = {};
+  state.cart.forEach(item => {
+    if (!grouped[item.storeId]) {
+      grouped[item.storeId] = [];
+    }
+    grouped[item.storeId].push(item);
+  });
+
+  Object.entries(grouped).forEach(([storeId, items]) => {
+    const store = STORES[storeId];
+    if (!store) return;
+
+    let pesoTienda = 0;
+    items.forEach(item => {
+      const itemWeight = (PRODUCT_WEIGHTS[item.productId] || 2.0) * item.quantity;
+      pesoTienda += itemWeight;
+    });
+
+    const distancia = DISTANCES[storeId][state.selectedDistrict] || 10.0;
+    let fleteTienda = 0;
+    if (pesoTienda <= 500) {
+      fleteTienda = distancia * 2.0;
+      fleteTienda = Math.max(fleteTienda, 10.0);
+    } else {
+      fleteTienda = 50.0 + (distancia * 5.0);
+    }
+
+    envioGeneral += fleteTienda;
+    pesoGeneral += pesoTienda;
+
+    items.forEach(item => {
+      const product = productCache.get(item.productId);
+      if (!product) return;
+
+      const unit = getProductUnit(product);
+      const totalItemPrice = item.price * item.quantity;
+      subtotalGeneral += totalItemPrice;
+
+      tableRows.push([
+        item.quantity.toString(),
+        unit,
+        `${product.name} (Marca: ${product.brand}) - Prov: ${store.name}`,
+        `S/. ${item.price.toFixed(2)}`,
+        `S/. ${totalItemPrice.toFixed(2)}`
+      ]);
+    });
+  });
+
+  const subtotalNeto = subtotalGeneral / 1.18;
+  const igv = subtotalGeneral - subtotalNeto;
+  const totalConEnvio = subtotalGeneral + envioGeneral;
+
+  doc.autoTable({
+    startY: 78,
+    head: [['Cant.', 'Unidad', 'Descripción / Material', 'P. Unitario', 'Subtotal']],
+    body: tableRows,
+    theme: 'grid',
+    headStyles: {
+      fillColor: [15, 23, 42], // #0f172a
+      textColor: [255, 255, 255],
+      fontStyle: 'bold',
+      halign: 'center'
+    },
+    columnStyles: {
+      0: { halign: 'center', cellWidth: 15 },
+      1: { halign: 'center', cellWidth: 20 },
+      2: { halign: 'left' },
+      3: { halign: 'right', cellWidth: 25 },
+      4: { halign: 'right', cellWidth: 25 }
+    },
+    styles: {
+      fontSize: 9,
+      cellPadding: 3,
+      lineColor: [226, 232, 240]
+    },
+    alternateRowStyles: {
+      fillColor: [248, 250, 252]
+    }
+  });
+
+  let finalY = doc.lastAutoTable.finalY + 10;
+  if (finalY + 50 > 280) {
+    doc.addPage();
+    finalY = 20;
+  }
+
+  // Totales
+  doc.setTextColor(15, 23, 42);
+  doc.setFont("Helvetica", "normal");
+  doc.setFontSize(10);
+  doc.text("Subtotal (sin IGV):", 130, finalY);
+  doc.text(`S/. ${subtotalNeto.toFixed(2)}`, 195, finalY, { align: "right" });
+
+  doc.text("IGV (18%):", 130, finalY + 6);
+  doc.text(`S/. ${igv.toFixed(2)}`, 195, finalY + 6, { align: "right" });
+
+  doc.text("Costos de Envío (Flete):", 130, finalY + 12);
+  doc.text(`S/. ${envioGeneral.toFixed(2)}`, 195, finalY + 12, { align: "right" });
+
+  doc.setFillColor(255, 122, 0); // #ff7a00
+  doc.rect(130, finalY + 17, 65, 10, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFont("Helvetica", "bold");
+  doc.setFontSize(11);
+  doc.text("TOTAL GENERAL:", 133, finalY + 23);
+  doc.text(`S/. ${totalConEnvio.toFixed(2)}`, 192, finalY + 23, { align: "right" });
+
+  // Términos y Condiciones
+  doc.setTextColor(100, 116, 139); // #64748b
+  doc.setFont("Helvetica", "bold");
+  doc.setFontSize(8);
+  doc.text("TÉRMINOS Y CONDICIONES:", 15, finalY);
+
+  doc.setFont("Helvetica", "normal");
+  const terms = [
+    "- Los precios mostrados incluyen IGV y corresponden a las ofertas de ferreterías seleccionadas.",
+    "- Las cotizaciones de materiales de construcción fluctúan constantemente según mercado.",
+    "- Esta proforma cuenta con una validez estricta de 3 días hábiles desde su emisión.",
+    `- Despacho programado para el distrito de ${district} sujeto a peso total (${pesoGeneral.toFixed(1)} kg).`,
+    "- Para concretar su pedido, proceda con el pago dentro de la app o contacte soporte."
+  ];
+  let termY = finalY + 5;
+  terms.forEach(term => {
+    doc.text(term, 15, termY);
+    termY += 4;
+  });
+
+  // Numeración de páginas y pie de página decorativo
+  const pageCount = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setDrawColor(226, 232, 240);
+    doc.setLineWidth(0.5);
+    doc.line(15, 282, 195, 282);
+
+    doc.setTextColor(148, 163, 184); // #94a3b8
+    doc.setFontSize(8);
+    doc.setFont("Helvetica", "normal");
+    doc.text("ObraExpres S.A. | RUC 20601234567 | www.obraexpres.com", 15, 288);
+    doc.text(`Página ${i} de ${pageCount}`, 195, 288, { align: "right" });
+  }
+
+  doc.save(`Proforma_ObraExpres_${proformaNum}.pdf`);
+  showToast("Proforma PDF descargada con éxito", "success");
 }

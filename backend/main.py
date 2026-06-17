@@ -123,40 +123,69 @@ def get_products(
 
 # Tabla de pesos reales de los productos en kg
 PRODUCT_WEIGHTS = {
-    1: 1.3,    # Taladro
-    2: 2.0,    # Amoladora
-    3: 42.5,   # Cemento
-    4: 9.0,    # Varilla
-    5: 12.0,   # Cable THW
-    6: 0.3,    # Interruptor
-    7: 2.5,    # Mezcladora
-    8: 10.0,   # Tubo PVC 4"
-    9: 24.0,   # Pintura (19L)
-    10: 25.0,  # Yeso
-    11: 2.0,   # Pala
-    12: 15.0,  # Carretilla
-    13: 0.8,   # Martillo
-    14: 0.4,   # Cinta métrica
-    15: 1.2,   # Nivel
-    16: 1.5,   # Llave Stilson
-    17: 0.9,   # Juego destornilladores
-    18: 8.0,   # Escalera
-    19: 1.0,   # Clavos (1kg)
-    20: 1.0,   # Alambre (1kg)
-    21: 2.5,   # Ladrillo
-    22: 40.0,  # Arena (40kg)
-    23: 40.0,  # Piedra (40kg)
-    24: 1.2,   # Aditivo Plastificante
-    25: 25.0,  # Pegamento cerámico
-    26: 0.3,   # Tubo de abasto
-    27: 35.0,  # Inodoro
-    28: 4.0,   # Cable de red
-    29: 0.1,   # Cinta aislante
-    30: 0.1,   # Caja octogonal
-    31: 0.3,   # Llave termomagnética
-    32: 0.4,   # Silicona
-    33: 0.3,   # Rodillo
-    34: 0.1    # Brocha
+    1: 1.3,      # Taladro DeWalt
+    2: 2.0,      # Amoladora Bosch
+    3: 42.5,     # Cemento Pacasmayo Antisalitre
+    4: 2.0,      # Varilla de Fierro 6mm (9m)
+    5: 12.0,     # Cable THW Indeco
+    6: 0.3,      # Interruptor Bticino
+    7: 2.5,      # Mezcladora Vainsa
+    8: 2.0,      # Tubo PVC SAP Pavco
+    9: 5.0,      # Pintura CPP (Galón)
+    10: 25.0,    # Yeso Pacasmayo (25kg)
+    11: 2.0,     # Pala Redonda
+    12: 15.0,    # Carretilla Buggy
+    13: 0.8,     # Martillo Stanley
+    14: 0.4,     # Wincha Métrica Stanley
+    15: 1.2,     # Nivel de Burbuja Stanley
+    16: 1.5,     # Llave Stilson Ridgid
+    17: 0.9,     # Juego Destornilladores Stanley
+    18: 8.0,     # Escalera Tijera Nexstep
+    19: 1.0,     # Clavos Arequipa 3" (1kg)
+    20: 1.0,     # Alambre Nro 16 (1kg)
+    21: 2.8,     # Ladrillo KK 18 Huecos Lark (Unidad)
+    22: 40.0,    # Arena Fina Bolsa (40kg)
+    23: 40.0,    # Piedra Chancada Bolsa (40kg)
+    24: 1.2,     # Aditivo Plastificante Chema
+    25: 25.0,    # Pegamento Celima (25kg)
+    26: 0.3,     # Tubo Abasto Vainsa
+    27: 35.0,    # Inodoro Trebol
+    28: 4.0,     # Cable de red Dixon
+    29: 0.1,     # Cinta Aislante 3M
+    30: 0.1,     # Caja Octogonal Pavco
+    31: 0.3,     # Llave Termomagnética Bticino
+    32: 0.4,     # Silicona Tekno
+    33: 0.3,     # Rodillo Tekno
+    34: 0.1,     # Brocha CPP 3"
+    # --- Obra Gruesa ---
+    35: 42.5,    # Cemento Pacasmayo Extra Forte
+    36: 42.5,    # Cemento Pacasmayo Tipo I
+    37: 42.5,    # Cemento Sol
+    38: 42.5,    # Cemento Inka
+    39: 2800.0,  # Ladrillo KK 18 Huecos (Millar)
+    40: 2.1,     # Ladrillo Pandereta (Unidad)
+    41: 2100.0,  # Ladrillo Pandereta (Millar)
+    42: 8.0,     # Ladrillo Techo Hueco 15
+    43: 7.0,     # Ladrillo Techo Hueco 12
+    44: 4.5,     # Ladrillo Techo Hueco 8
+    45: 2.0,     # Aceros Arequipa 6mm (9m)
+    46: 3.6,     # Aceros Arequipa 8mm (9m)
+    47: 5.0,     # Aceros Arequipa 3/8" (9m)
+    48: 9.0,     # Aceros Arequipa 1/2" (9m)
+    49: 14.0,    # Aceros Arequipa 5/8" (9m)
+    50: 20.0,    # Aceros Arequipa 3/4" (9m)
+    51: 2.0,     # Siderperu 6mm (9m)
+    52: 3.6,     # Siderperu 8mm (9m)
+    53: 5.0,     # Siderperu 3/8" (9m)
+    54: 9.0,     # Siderperu 1/2" (9m)
+    55: 14.0,    # Siderperu 5/8" (9m)
+    56: 20.0,    # Siderperu 3/4" (9m)
+    57: 1600.0,  # Arena Gruesa (m³)
+    58: 1500.0,  # Arena Fina (m³)
+    59: 1550.0,  # Piedra Chancada 1/2" (m³)
+    60: 1550.0,  # Piedra Chancada 3/4" (m³)
+    61: 1700.0,  # Hormigón (m³)
+    62: 1800.0   # Afirmado (m³)
 }
 
 # Matriz de distancias en km a distritos de la Zona Norte
