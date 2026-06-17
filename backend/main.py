@@ -1,0 +1,337 @@
+from fastapi import FastAPI, Depends, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from sqlalchemy.orm import Session
+from typing import List, Optional
+import os
+from .database import engine, get_db, Base
+from . import models, schemas
+
+# Asegurar que las tablas existen (en caso de que no se corra el seed)
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI(title="ObraExpres API", version="1.0.0")
+
+# Habilitar CORS para permitir llamadas del frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/api/stores")
+def get_stores(db: Session = Depends(get_db)):
+    stores = db.query(models.Store).all()
+    result = []
+    for s in stores:
+        result.append({
+            "id": s.id,
+            "name": s.name,
+            "color": s.color,
+            "logo": s.logo,
+            "rating": s.rating,
+            "reviews": s.reviews,
+            "address": s.address,
+            "coords": {"x": s.coords_x, "y": s.coords_y},
+            "hours": s.hours,
+            "deliveryFee": s.delivery_fee,
+            "minDeliveryTime": s.min_delivery_time
+        })
+    return result
+
+@app.get("/api/categories")
+def get_categories(db: Session = Depends(get_db)):
+    categories = db.query(models.Product.category).distinct().all()
+    return [c[0] for c in categories if c[0]]
+
+@app.get("/api/products")
+def get_products(
+    category: Optional[str] = None,
+    search: Optional[str] = None,
+    min_price: Optional[float] = None,
+    max_price: Optional[float] = None,
+    store_ids: Optional[str] = None,  # Recibe IDs separados por comas
+    sort_by: Optional[str] = "default",
+    db: Session = Depends(get_db)
+):
+    query = db.query(models.Product)
+    
+    # 1. Filtro por categoría
+    if category and category != "all":
+        query = query.filter(models.Product.category == category)
+        
+    # 2. Filtro por búsqueda
+    if search:
+        search_filter = f"%{search}%"
+        query = query.filter(
+            (models.Product.name.ilike(search_filter)) |
+            (models.Product.brand.ilike(search_filter)) |
+            (models.Product.description.ilike(search_filter))
+        )
+        
+    products = query.all()
+    
+    # Parsear tiendas
+    parsed_store_ids = []
+    if store_ids:
+        parsed_store_ids = [s.strip() for s in store_ids.split(",") if s.strip()]
+        
+    # 3. Mapear y filtrar por ofertas de tienda en Python
+    filtered_products = []
+    for prod in products:
+        matching_offers = []
+        for offer in prod.offers:
+            # Filtrar por tiendas
+            if parsed_store_ids and offer.store_id not in parsed_store_ids:
+                continue
+            # Filtrar por precios
+            if min_price is not None and offer.price < min_price:
+                continue
+            if max_price is not None and offer.price > max_price:
+                continue
+            matching_offers.append({
+                "storeId": offer.store_id,
+                "price": offer.price,
+                "stock": offer.stock,
+                "deliveryTime": offer.delivery_time
+            })
+            
+        # Si tiene ofertas válidas bajo el filtro actual, añadir producto
+        if len(matching_offers) > 0:
+            filtered_products.append({
+                "id": prod.id,
+                "name": prod.name,
+                "brand": prod.brand,
+                "category": prod.category,
+                "description": prod.description,
+                "icon": prod.icon,
+                "specs": prod.specs,
+                "stores": matching_offers
+            })
+            
+    # 4. Ordenación
+    if sort_by == "price-asc":
+        filtered_products.sort(key=lambda p: min(o["price"] for o in p["stores"]) if p["stores"] else float('inf'))
+    elif sort_by == "price-desc":
+        filtered_products.sort(key=lambda p: min(o["price"] for o in p["stores"]) if p["stores"] else float('-inf'), reverse=True)
+    elif sort_by == "name-asc":
+        filtered_products.sort(key=lambda p: p["name"])
+        
+    return filtered_products
+
+# Tabla de pesos reales de los productos en kg
+PRODUCT_WEIGHTS = {
+    1: 1.3,    # Taladro
+    2: 2.0,    # Amoladora
+    3: 42.5,   # Cemento
+    4: 9.0,    # Varilla
+    5: 12.0,   # Cable THW
+    6: 0.3,    # Interruptor
+    7: 2.5,    # Mezcladora
+    8: 10.0,   # Tubo PVC 4"
+    9: 24.0,   # Pintura (19L)
+    10: 25.0,  # Yeso
+    11: 2.0,   # Pala
+    12: 15.0,  # Carretilla
+    13: 0.8,   # Martillo
+    14: 0.4,   # Cinta métrica
+    15: 1.2,   # Nivel
+    16: 1.5,   # Llave Stilson
+    17: 0.9,   # Juego destornilladores
+    18: 8.0,   # Escalera
+    19: 1.0,   # Clavos (1kg)
+    20: 1.0,   # Alambre (1kg)
+    21: 2.5,   # Ladrillo
+    22: 40.0,  # Arena (40kg)
+    23: 40.0,  # Piedra (40kg)
+    24: 1.2,   # Aditivo Plastificante
+    25: 25.0,  # Pegamento cerámico
+    26: 0.3,   # Tubo de abasto
+    27: 35.0,  # Inodoro
+    28: 4.0,   # Cable de red
+    29: 0.1,   # Cinta aislante
+    30: 0.1,   # Caja octogonal
+    31: 0.3,   # Llave termomagnética
+    32: 0.4,   # Silicona
+    33: 0.3,   # Rodillo
+    34: 0.1    # Brocha
+}
+
+# Matriz de distancias en km a distritos de la Zona Norte
+DISTANCES = {
+    "construmax": {
+        "Chiclayo": 5.0,
+        "Pimentel": 15.0,
+        "Lambayeque": 12.0,
+        "Trujillo": 200.0,
+        "Víctor Larco": 205.0,
+        "El Porvenir": 202.0
+    },
+    "ferretodo": {
+        "Chiclayo": 12.0,
+        "Pimentel": 22.0,
+        "Lambayeque": 3.0,
+        "Trujillo": 212.0,
+        "Víctor Larco": 217.0,
+        "El Porvenir": 214.0
+    },
+    "depositoinca": {
+        "Chiclayo": 200.0,
+        "Pimentel": 210.0,
+        "Lambayeque": 208.0,
+        "Trujillo": 6.0,
+        "Víctor Larco": 4.0,
+        "El Porvenir": 10.0
+    }
+}
+
+@app.post("/api/orders")
+def create_order(checkout: schemas.CheckoutIn, db: Session = Depends(get_db)):
+    if not checkout.items:
+        raise HTTPException(status_code=400, detail="El carrito está vacío")
+        
+    valid_districts = {"Chiclayo", "Pimentel", "Lambayeque", "Trujillo", "Víctor Larco", "El Porvenir"}
+    if checkout.district not in valid_districts:
+        raise HTTPException(status_code=400, detail="Distrito de despacho no válido")
+        
+    subtotal = 0.0
+    order_items_to_create = []
+    items_by_store = {}
+    
+    # Procesar cada item del carrito
+    for item in checkout.items:
+        product = db.query(models.Product).filter(models.Product.id == item.productId).first()
+        if not product:
+            raise HTTPException(status_code=404, detail=f"Producto con id {item.productId} no encontrado")
+            
+        assoc = db.query(models.StoreProductAssociation).filter(
+            models.StoreProductAssociation.product_id == item.productId,
+            models.StoreProductAssociation.store_id == item.storeId
+        ).first()
+        
+        if not assoc:
+            raise HTTPException(status_code=400, detail=f"El producto {product.name} no está disponible en la tienda {item.storeId}")
+            
+        if assoc.stock < item.quantity:
+            store_name = db.query(models.Store.name).filter(models.Store.id == item.storeId).scalar() or item.storeId
+            raise HTTPException(
+                status_code=400,
+                detail=f"Stock insuficiente para '{product.name}' en {store_name}. Disponible: {assoc.stock}, Solicitado: {item.quantity}"
+            )
+            
+        # Calcular precio
+        item_total_price = assoc.price * item.quantity
+        subtotal += item_total_price
+        
+        # Descontar stock de la base de datos
+        assoc.stock -= item.quantity
+        
+        # Agrupar por tienda para cálculo de logística
+        if item.storeId not in items_by_store:
+            items_by_store[item.storeId] = []
+        items_by_store[item.storeId].append((product.id, item.quantity))
+        
+        # Obtener nombre de la tienda para el pedido
+        store_name = db.query(models.Store.name).filter(models.Store.id == item.storeId).scalar() or item.storeId
+        
+        order_items_to_create.append(models.OrderItem(
+            product_id=product.id,
+            product_name=product.name,
+            store_id=assoc.store_id,
+            store_name=store_name,
+            quantity=item.quantity,
+            price=assoc.price
+        ))
+        
+    # Calcular cargos de envío dinámicos por tienda
+    shipping_fee = 0.0
+    for store_id, items in items_by_store.items():
+        # Calcular peso total
+        peso_tienda = sum(PRODUCT_WEIGHTS.get(pid, 2.0) * qty for pid, qty in items)
+        
+        # Obtener distancia
+        distancia = DISTANCES.get(store_id, {}).get(checkout.district, 10.0)
+        
+        # Calcular flete según reglas de peso
+        if peso_tienda <= 500.0:
+            flete_tienda = distancia * 2.0
+            flete_tienda = max(flete_tienda, 10.0)  # mínimo S/. 10
+        else:
+            flete_tienda = 50.0 + (distancia * 5.0)  # Camión pesado
+            
+        shipping_fee += round(flete_tienda, 2)
+            
+    total = subtotal + shipping_fee
+
+    
+    # Crear objeto de orden
+    order = models.Order(
+        subtotal=subtotal,
+        shipping_fee=shipping_fee,
+        total=total,
+        items=order_items_to_create
+    )
+    
+    try:
+        db.add(order)
+        db.commit()
+        db.refresh(order)
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Error al procesar la orden: {str(e)}")
+        
+    # Formatear la salida de los items
+    items_out = []
+    for o_item in order.items:
+        items_out.append({
+            "productId": o_item.product_id,
+            "productName": o_item.product_name,
+            "storeId": o_item.store_id,
+            "storeName": o_item.store_name,
+            "quantity": o_item.quantity,
+            "price": o_item.price
+        })
+        
+    return {
+        "id": order.id,
+        "createdAt": order.created_at,
+        "subtotal": order.subtotal,
+        "shippingFee": order.shipping_fee,
+        "total": order.total,
+        "items": items_out
+    }
+
+
+@app.post("/api/register", response_model=schemas.UserOut)
+def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    # Check if user already exists
+    existing = db.query(models.User).filter(models.User.email == user.email).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="El correo electrónico ya está registrado")
+    
+    db_user = models.User(
+        full_name=user.full_name,
+        email=user.email,
+        phone=user.phone,
+        role=user.role,
+        password=user.password  # En producción usaríamos un hash real (e.g. bcrypt)
+    )
+    try:
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Error al registrar usuario: {str(e)}")
+        
+    return db_user
+
+
+# Montar la carpeta frontend de forma estática en la raíz
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIR = os.path.join(os.path.dirname(BASE_DIR), "frontend")
+app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+
+

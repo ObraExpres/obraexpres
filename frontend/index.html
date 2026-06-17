@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ObraExpres | Comparador y Tienda de Materiales de Construcción</title>
+  <meta name="description" content="Encuentra el mejor precio para tus materiales de construcción. Compara entre tiendas locales y compra en un solo lugar.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Cabecera principal -->
+  <header>
+    <div class="nav-container">
+      <a href="#catalog" class="logo" id="logo-home">
+        <span>🏗️ ObraExpres</span>
+      </a>
+
+      <!-- Barra de búsqueda en tiempo real -->
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="Buscar taladros, cemento, tubos, cables...">
+      </div>
+
+      <!-- Acciones de navegación -->
+      <div class="nav-actions">
+        <!-- Pestañas de navegación SPA -->
+        <nav class="nav-tabs">
+          <button class="tab-btn active" data-target="catalog-view">
+            📦 Catálogo
+          </button>
+          <button class="tab-btn" data-target="stores-view">
+            🏪 Tiendas
+          </button>
+          <button class="tab-btn" data-target="compare-view">
+            ⚖️ Comparador
+          </button>
+          <button class="tab-btn" data-target="calculator-view">
+            📐 Calculadora
+          </button>
+          <button class="tab-btn" data-target="cart-view">
+            🛒 Carrito
+            <span class="cart-count" id="global-cart-count">0</span>
+          </button>
+        </nav>
+
+        <!-- Alternar Tema Oscuro/Claro -->
+        <button class="theme-toggle-btn" id="theme-toggle" title="Cambiar tema">
+          🌙
+        </button>
+
+        <!-- Registrarse / Iniciar Sesión -->
+        <button class="btn btn-primary" id="btn-auth" style="padding: 0.5rem 1.25rem; font-size: 0.9rem; margin-left: 0.5rem; flex: none;">
+          👤 Iniciar Sesión
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido principal dinámico -->
+  <main>
+
+    <!-- VISTA 1: CATÁLOGO DE PRODUCTOS -->
+    <section id="catalog-view" class="view-panel active">
+      <div class="catalog-container">
+        <!-- Barra lateral de filtros -->
+        <aside class="filters-sidebar">
+          <div class="filter-section">
+            <h3>Categorías</h3>
+            <ul class="category-list" id="category-filter-list">
+              <li class="category-item active" data-category="all">Todas las Categorías</li>
+              <li class="category-item" data-category="Herramientas">🔌 Herramientas</li>
+              <li class="category-item" data-category="Materiales">🧱 Materiales</li>
+              <li class="category-item" data-category="Electricidad">⚡ Electricidad</li>
+              <li class="category-item" data-category="Plomería">🚰 Plomería</li>
+              <li class="category-item" data-category="Pinturas">🎨 Pinturas</li>
+            </ul>
+          </div>
+
+          <div class="filter-section">
+            <h3>Rango de Precios</h3>
+            <div class="price-inputs">
+              <input type="number" id="price-min" placeholder="Min S/." min="0">
+              <span>-</span>
+              <input type="number" id="price-max" placeholder="Max S/." min="0">
+            </div>
+          </div>
+
+          <div class="filter-section">
+            <h3>Disponibilidad en Tiendas</h3>
+            <div id="store-checkboxes-container">
+              <!-- Renderizado dinámico desde JS -->
+            </div>
+          </div>
+
+          <button class="btn btn-secondary" id="clear-filters-btn" style="width: 100%; margin-top: 1rem;">
+            🔄 Limpiar Filtros
+          </button>
+        </aside>
+
+        <!-- Listado de Productos -->
+        <div class="products-grid-container">
+          <div class="catalog-header">
+            <div>
+              <span id="results-count" style="color: var(--text-secondary); font-size: 0.95rem;">Mostrando 0 productos</span>
+            </div>
+            <div>
+              <label for="sort-select" style="font-size: 0.9rem; color: var(--text-secondary); margin-right: 0.5rem;">Ordenar por:</label>
+              <select id="sort-select">
+                <option value="default">Recomendados</option>
+                <option value="price-asc">Precio: Menor a Mayor</option>
+                <option value="price-desc">Precio: Mayor a Menor</option>
+                <option value="name-asc">Nombre: A-Z</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="products-grid" id="products-grid">
+            <!-- Cargado dinámicamente -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA 2: LISTADO DE TIENDAS Y MAPA INTERACTIVO -->
+    <section id="stores-view" class="view-panel">
+      <div class="stores-grid">
+        <!-- Lista de tiendas con sucursales e información -->
+        <div class="stores-list" id="stores-list-container">
+          <!-- Cargado dinámicamente -->
+        </div>
+
+        <!-- Mapa interactivo de localización (Simulado) -->
+        <div class="map-container">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3>Mapa de Tiendas y Sucursales</h3>
+            <span style="font-size: 0.85rem; color: var(--text-secondary);">📍 Cobertura Metropolitana</span>
+          </div>
+          <div class="map-canvas" id="map-canvas">
+            <!-- Pin del usuario -->
+            <div class="map-user-pin" title="Tu Ubicación Actual" style="top: 50%; left: 50%;"></div>
+            
+            <!-- Pines de tiendas colocados dinámicamente por JS -->
+            <div id="map-store-pins-container"></div>
+            
+            <!-- Red vial y ríos de fondo decorativos en SVG -->
+            <svg style="position: absolute; top:0; left:0; width:100%; height:100%; z-index: 1; pointer-events: none;" opacity="0.15">
+              <line x1="0" y1="50" x2="100%" y2="50" stroke="var(--text-primary)" stroke-width="2" stroke-dasharray="5,5" />
+              <line x1="50" y1="0" x2="50" y2="100%" stroke="var(--text-primary)" stroke-width="2" stroke-dasharray="5,5" />
+              <circle cx="50%" cy="50%" r="150" fill="none" stroke="var(--text-primary)" stroke-width="1" />
+              <circle cx="50%" cy="50%" r="70" fill="none" stroke="var(--text-primary)" stroke-width="1" />
+              <!-- Un río falso azul -->
+              <path d="M 0 350 Q 150 200, 300 250 T 600 150 T 1000 280" fill="none" stroke="var(--secondary)" stroke-width="8" opacity="0.3" />
+            </svg>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; gap: 1rem;">
+            <span>🔵 Tu Ubicación</span>
+            <span>🟠 Tienda Seleccionada</span>
+            <span>⚪ Otras Tiendas</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA 3: COMPARADOR DIRECTO DE PRODUCTOS -->
+    <section id="compare-view" class="view-panel">
+      <div class="compare-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <div>
+            <h2 style="font-family: var(--font-title); font-weight: 800;">Comparador de Materiales</h2>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">Compara características y precios en todas las tiendas de hasta 3 productos.</p>
+          </div>
+          <button class="btn btn-secondary" id="clear-compare-btn">
+            🗑️ Vaciar Comparador
+          </button>
+        </div>
+
+        <div id="compare-table-wrapper">
+          <!-- Cargado dinámicamente desde JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA 3.5: CALCULADORA DE OBRA -->
+    <section id="calculator-view" class="view-panel">
+      <div class="compare-container" style="max-width: 800px; margin: 0 auto;">
+        <div style="margin-bottom: 1.5rem; text-align: center;">
+          <h2 style="font-family: var(--font-title); font-weight: 800; font-size: 2rem;">📐 Calculadora de Obra</h2>
+          <p style="color: var(--text-secondary); font-size: 0.95rem;">Estima de forma precisa los materiales necesarios para tu proyecto y añádelos al carrito al mejor precio del mercado.</p>
+        </div>
+
+        <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-md);">
+          <!-- Tipo de Cálculo -->
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label for="calc-type" style="display:block; font-size:0.9rem; font-weight:700; margin-bottom:0.5rem; color:var(--text-secondary);">Selecciona la partida a calcular</label>
+            <select id="calc-type" style="width:100%; padding:0.75rem; border-radius:var(--radius-md); border:1px solid var(--border-color); background-color:var(--bg-primary); color:var(--text-primary); font-family:var(--font-body); font-size:0.95rem; cursor:pointer;">
+              <option value="concreto">Concreto Estructural f'c = 210 kg/cm² (Columnas, Vigas, Zapatas)</option>
+              <option value="muro">Muro de Ladrillo (Ladrillo King Kong / Klinker soga)</option>
+              <option value="techo">Techo Aligerado (Losa con ladrillos huecos y fierro)</option>
+            </select>
+          </div>
+
+          <!-- Campos de Entrada Dinámicos -->
+          <div id="calc-inputs-container" style="margin-bottom: 2rem;">
+            <!-- Concreto Inputs -->
+            <div id="input-concreto" class="calc-input-group">
+              <label for="calc-volume" style="display:block; font-size:0.9rem; font-weight:600; margin-bottom:0.5rem; color:var(--text-secondary);">Volumen de concreto a vaciar (m³)</label>
+              <input type="number" id="calc-volume" value="1" min="0.1" step="0.1" style="width:100%; padding:0.65rem; border-radius:var(--radius-sm); border:1px solid var(--border-color); background-color:var(--bg-primary); color:var(--text-primary); font-size:0.95rem;">
+            </div>
+            
+            <!-- Muro Inputs (Oculto inicialmente) -->
+            <div id="input-muro" class="calc-input-group" style="display: none;">
+              <label for="calc-wall-area" style="display:block; font-size:0.9rem; font-weight:600; margin-bottom:0.5rem; color:var(--text-secondary);">Área de muro a asentar (m²)</label>
+              <input type="number" id="calc-wall-area" value="10" min="1" step="1" style="width:100%; padding:0.65rem; border-radius:var(--radius-sm); border:1px solid var(--border-color); background-color:var(--bg-primary); color:var(--text-primary); font-size:0.95rem;">
+            </div>
+
+            <!-- Techo Inputs (Oculto inicialmente) -->
+            <div id="input-techo" class="calc-input-group" style="display: none;">
+              <label for="calc-roof-area" style="display:block; font-size:0.9rem; font-weight:600; margin-bottom:0.5rem; color:var(--text-secondary);">Área del techo aligerado (m²)</label>
+              <input type="number" id="calc-roof-area" value="50" min="1" step="1" style="width:100%; padding:0.65rem; border-radius:var(--radius-sm); border:1px solid var(--border-color); background-color:var(--bg-primary); color:var(--text-primary); font-size:0.95rem;">
+            </div>
+          </div>
+
+          <!-- Resultados de Materiales -->
+          <div style="background-color: var(--bg-tertiary); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2rem;">
+            <h3 style="font-family: var(--font-title); font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">📋 Estimación de Materiales Requeridos</h3>
+            <div id="calc-results-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <!-- Se cargan dinámicamente -->
+            </div>
+          </div>
+
+          <button class="checkout-btn" id="btn-add-calc-to-cart" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 1.05rem;">
+            🛒 Añadir materiales calculados al Carrito
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA 4: CARRITO DE COMPRAS CON MULTI-TIENDA -->
+    <section id="cart-view" class="view-panel">
+      <div class="cart-grid">
+        <!-- Lista de productos agrupados por tienda -->
+        <div class="cart-items-container" id="cart-groups-container">
+          <!-- Cargado dinámicamente -->
+        </div>
+
+        <!-- Resumen del carrito -->
+        <div class="cart-summary">
+          <h3>Resumen del Pedido</h3>
+          
+          <!-- Selector de Distrito de Despacho -->
+          <div class="district-selector-container" style="margin-bottom: 1.25rem;">
+            <label for="cart-district" style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.35rem; color:var(--text-secondary);">Distrito de Despacho (Zona Norte)</label>
+            <select id="cart-district" style="width:100%; padding:0.6rem; border-radius:var(--radius-sm); border:1px solid var(--border-color); background-color:var(--bg-primary); color:var(--text-primary); font-family:var(--font-body); font-size:0.9rem; cursor:pointer;">
+              <option value="Chiclayo">Chiclayo (Base)</option>
+              <option value="Pimentel">Pimentel</option>
+              <option value="Lambayeque">Lambayeque</option>
+              <option value="Trujillo">Trujillo</option>
+              <option value="Víctor Larco">Víctor Larco</option>
+              <option value="El Porvenir">El Porvenir</option>
+            </select>
+          </div>
+
+          <div class="summary-details" id="cart-summary-details">
+            <!-- Cargado dinámicamente -->
+          </div>
+          <button class="checkout-btn" id="checkout-btn">
+            💳 Procesar Compra en ObraExpres
+          </button>
+          <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 1rem; line-height: 1.4;">
+            Nota: Al hacer clic se simularán pedidos independientes dirigidos a cada ferretería proveedora de manera automatizada.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL DE DETALLE DEL PRODUCTO Y COMPARATIVA -->
+  <div class="modal-overlay" id="product-detail-modal">
+    <div class="modal-content">
+      <button class="close-modal" id="close-modal-btn">×</button>
+      <div class="modal-body">
+        
+        <!-- Ficha de producto superior -->
+        <div class="product-detail-grid">
+          <div class="product-detail-icon" id="modal-product-icon">🔌</div>
+          <div class="product-detail-main">
+            <span class="product-brand" id="modal-product-brand">MARCA</span>
+            <h2 id="modal-product-name">Nombre del Producto</h2>
+            <p class="product-detail-desc" id="modal-product-desc">Descripción del producto...</p>
+            
+            <table class="specs-table" id="modal-specs-table">
+              <!-- Llenado dinámicamente -->
+            </table>
+          </div>
+        </div>
+
+        <!-- Tabla comparativa de precios y stock por tienda -->
+        <div class="comparison-section">
+          <h3>⚖️ Comparativa de Ofertas por Tienda</h3>
+          <div style="overflow-x: auto;">
+            <table class="compare-table">
+              <thead>
+                <tr>
+                  <th>Ferretería / Distribuidora</th>
+                  <th>Precio</th>
+                  <th>Disponibilidad</th>
+                  <th>Entrega estimada</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="modal-comparison-tbody">
+                <!-- Filas añadidas por JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE REGISTRO / AUTENTICACIÓN -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-content" style="max-width: 450px;">
+      <button class="close-modal" id="close-auth-modal-btn">×</button>
+      <div class="modal-body" style="padding: 2.5rem 2rem;">
+        <h2 style="font-family: var(--font-title); font-weight: 800; text-align: center; margin-bottom: 1.5rem; font-size: 1.6rem;" id="auth-modal-title">Registrarse en ObraExpres</h2>
+        
+        <form id="register-form">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="reg-name" style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.35rem; color:var(--text-secondary);">Nombre Completo</label>
+            <input type="text" id="reg-name" required placeholder="Ej. Juan Pérez" style="width:100%; padding:0.65rem; border-radius:var(--radius-sm); border:1px solid var(--border-color); background-color:var(--bg-primary); color:var(--text-primary); font-family:var(--font-body); font-size:0.9rem;">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="reg-email" style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.35rem; color:var(--text-secondary);">Correo Electrónico</label>
+            <input type="email" id="reg-email" required placeholder="correo@ejemplo.com" style="width:100%; padding:0.65rem; border-radius:var(--radius-sm); border:1px solid var(--border-color); background-color:var(--bg-primary); color:var(--text-primary); font-family:var(--font-body); font-size:0.9rem;">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="reg-phone" style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.35rem; color:var(--text-secondary);">Teléfono</label>
+            <input type="tel" id="reg-phone" required placeholder="Ej. 987654321" style="width:100%; padding:0.65rem; border-radius:var(--radius-sm); border:1px solid var(--border-color); background-color:var(--bg-primary); color:var(--text-primary); font-family:var(--font-body); font-size:0.9rem;">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="reg-role" style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.35rem; color:var(--text-secondary);">Rol</label>
+            <select id="reg-role" required style="width:100%; padding:0.65rem; border-radius:var(--radius-sm); border:1px solid var(--border-color); background-color:var(--bg-primary); color:var(--text-primary); font-family:var(--font-body); font-size:0.9rem;">
+              <option value="Cliente General">Cliente General</option>
+              <option value="Maestro de Obra">Maestro de Obra</option>
+              <option value="Transportista">Transportista</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label for="reg-password" style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.35rem; color:var(--text-secondary);">Contraseña</label>
+            <input type="password" id="reg-password" required placeholder="••••••••" style="width:100%; padding:0.65rem; border-radius:var(--radius-sm); border:1px solid var(--border-color); background-color:var(--bg-primary); color:var(--text-primary); font-family:var(--font-body); font-size:0.9rem;">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%; padding:0.75rem; font-size:1rem;">Crear Cuenta</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor para Notificaciones Toast -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Pie de página -->
+  <footer>
+    <div class="footer-logo">🏗️ <span>ObraExpres</span></div>
+    <p>La red inteligente de suministros de construcción.</p>
+    <p style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted);">© 2026 ObraExpres S.A. Todos los derechos simulados.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
