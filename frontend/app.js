@@ -894,11 +894,10 @@ function renderCartView() {
 
     const distancia = DISTANCES[storeId][state.selectedDistrict] || 10.0;
     let fleteTienda = 0;
-    if (pesoTienda <= 500) {
-      fleteTienda = distancia * 2.0;
-      fleteTienda = Math.max(fleteTienda, 10.0);
+    if (pesoTienda <= 20.0) {
+      fleteTienda = 15.0;
     } else {
-      fleteTienda = 50.0 + (distancia * 5.0);
+      fleteTienda = 80.0 + (pesoTienda - 20.0) * 0.50;
     }
 
     const groupDiv = document.createElement('div');
@@ -912,7 +911,7 @@ function renderCartView() {
         <span>${store.name}</span>
       </h3>
       <span style="font-size: 0.85rem; color: var(--text-secondary); text-align: right; line-height: 1.3;">
-        Envío: S/. ${fleteTienda.toFixed(2)} | Distancia: ${distancia} km | Peso: ${pesoTienda.toFixed(1)} kg ${pesoTienda > 500 ? '🚛' : '🚗'}
+        Envío: S/. ${fleteTienda.toFixed(2)} | Distancia: ${distancia} km | Peso: ${pesoTienda.toFixed(1)} kg ${pesoTienda > 20 ? '🚛' : '🚗'}
       </span>
     `;
     groupDiv.appendChild(header);
@@ -1493,11 +1492,10 @@ function generateProformaPDF() {
 
     const distancia = DISTANCES[storeId][state.selectedDistrict] || 10.0;
     let fleteTienda = 0;
-    if (pesoTienda <= 500) {
-      fleteTienda = distancia * 2.0;
-      fleteTienda = Math.max(fleteTienda, 10.0);
+    if (pesoTienda <= 20.0) {
+      fleteTienda = 15.0;
     } else {
-      fleteTienda = 50.0 + (distancia * 5.0);
+      fleteTienda = 80.0 + (pesoTienda - 20.0) * 0.50;
     }
 
     envioGeneral += fleteTienda;

@@ -284,11 +284,10 @@ def create_order(checkout: schemas.CheckoutIn, db: Session = Depends(get_db)):
         distancia = DISTANCES.get(store_id, {}).get(checkout.district, 10.0)
         
         # Calcular flete según reglas de peso
-        if peso_tienda <= 500.0:
-            flete_tienda = distancia * 2.0
-            flete_tienda = max(flete_tienda, 10.0)  # mínimo S/. 10
+        if peso_tienda <= 20.0:
+            flete_tienda = 15.0
         else:
-            flete_tienda = 50.0 + (distancia * 5.0)  # Camión pesado
+            flete_tienda = 80.0 + (peso_tienda - 20.0) * 0.50
             
         shipping_fee += round(flete_tienda, 2)
             
